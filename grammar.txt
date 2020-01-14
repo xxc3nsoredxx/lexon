@@ -1,36 +1,42 @@
-json    =>  element
+whitespace is handled by lex
+i_numeral matches an entire integer
+NUMBER is split into INTEGER and FLOAT
 
-value   =>  object
-        =>  array
-        =>  string
-        =>  number
+JSON    =>  ELEMENT
+
+VALUE   =>  OBJECT
+        =>  ARRAY
+        =>  STRING
+        =>  NUMBER
         =>  "true"
         =>  "false"
         =>  "null"
 
-object  =>  '{' ws  '}'
-        =>  '{' members '}'
+OBJECT  =>  '{' ws  '}'
+        =>  '{' MEMBERS '}'
 
-members =>  member
-        =>  member  ',' members
+MEMBERS =>  MEMBER
+        =>  MEMBER  ',' MEMBERS
 
-member  =>  ws  string  ws  ':' element
+MEMBER  =>  ws  STRING  ws  ':' ELEMENT
 
-array   =>  '[' ws  ']'
-        =>  '[' elements    ']'
+ARRAY   =>  '[' ws  ']'
+        =>  '[' ELEMENTS    ']'
 
-elements    =>  element
-            =>  element ',' elements
+ELEMENTS    =>  ELEMENT
+            =>  ELEMENT ',' ELEMENTS
 
-string  =>  '"' characters  '"'
+ELEMENT =>  ws  VALUE   ws
 
-characters  =>  ""
-            =>  character   characters
+STRING  =>  '"' CHARACTERS  '"'
 
-character   =>  '0020'...'10FFFF'-'"'-'\'
-            =>  '\' escape
+CHARACTERS  =>  ""
+            =>  CHARACTER   CHARACTERS
 
-escape  =>  '"'
+CHARACTER   =>  '0020'...'10FFFF'-'"'-'\'
+            =>  '\' ESCAPE
+
+ESCAPE  =>  '"'
         =>  '\'
         =>  '/'
         =>  'b'
@@ -38,31 +44,33 @@ escape  =>  '"'
         =>  'n'
         =>  'r'
         =>  't'
-        =>  'u' hex hex hex hex
+        =>  'u' HEX HEX HEX HEX
 
-hex =>  digit
+HEX =>  DIGIT
     =>  'A'...'F'
     =>  'a'...'f'
 
-number  => integer  fraction    exponent
+NUMBER  => INTEGER  FRACTION    EXPONENT
 
-integer =>  digit
-        =>  onenine digits
-        =>  '-' digit
-        =>  '-' onenine digits
+INTEGER =>  DIGIT
+        =>  ONENINE DIGITS
+        =>  '-' DIGIT
+        =>  '-' ONENINE DIGITS
 
-digits  =>  digit
-        =>  digit   digits
+DIGITS  =>  DIGIT
+        =>  DIGIT   DIGITS
 
-digit   =>  '0'
-        =>  onenine
+DIGIT   =>  '0'
+        =>  ONENINE
 
-fraction    =>  ""
-            =>  '.' digits
+ONENINE =>  '1'...'9'
 
-exponent    =>  ""
-            =>  'E' sign    digits
-            =>  'e' sign    digits
+FRACTION    =>  ""
+            =>  '.' DIGITS
+
+EXPONENT    =>  ""
+            =>  'E' sign    DIGITS
+            =>  'e' sign    DIGITS
 
 sign    =>  ""
         =>  '+'
